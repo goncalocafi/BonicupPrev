@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Bell, User, Search } from "lucide-react"
+import { Bell, User, Search, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 const navLinks = [
   { href: "/",                label: "Inicio" },
@@ -15,19 +18,20 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
-      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
         <Link href="/" className="text-xl font-bold text-emerald-900 shrink-0">
           Bonicup
         </Link>
 
-        <ul className="flex items-center gap-6 flex-1">
+        {/* Desktop nav */}
+        <ul className="hidden md:flex items-center gap-6 flex-1">
           {navLinks.map(({ href, label }) => {
             const isActive =
               href === "/" ? pathname === "/" : pathname.startsWith(href)
-
             return (
               <li key={href}>
                 <Link
@@ -46,23 +50,80 @@ export function Navbar() {
           })}
         </ul>
 
-        <div className="flex items-center gap-3">
+        {/* Desktop right */}
+        <div className="hidden md:flex items-center gap-3 ml-auto">
           <div className="flex items-center gap-2 rounded-full bg-stone-100 px-3 py-1.5">
-            <Search className="h-3.5 w-3.5 text-gray-400" />
-            <input
+            <Search className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+            <Input
               type="text"
               placeholder="Buscar..."
-              className="bg-transparent text-sm text-gray-600 outline-none placeholder:text-gray-400 w-24"
+              className="bg-transparent border-none ring-0 focus-visible:ring-0 focus-visible:border-none shadow-none text-sm text-gray-600 placeholder:text-gray-400 w-24 h-auto p-0 rounded-none"
             />
           </div>
-          <button className="text-gray-400 hover:text-emerald-900 transition-colors">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-400 hover:text-emerald-900 hover:bg-transparent"
+          >
             <Bell className="h-5 w-5" />
-          </button>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-900 text-white text-xs font-bold">
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-900 text-white text-xs font-bold hover:bg-emerald-800 hover:text-white"
+          >
             A
-          </button>
+          </Button>
+        </div>
+
+        {/* Mobile right */}
+        <div className="flex md:hidden items-center gap-2 ml-auto">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-900 text-white text-xs font-bold hover:bg-emerald-800 hover:text-white"
+          >
+            A
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen((v) => !v)}
+            className="p-1.5 text-gray-600 hover:bg-stone-100"
+            aria-label="Menú"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
       </nav>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-white">
+          <ul className="flex flex-col py-2">
+            {navLinks.map(({ href, label }) => {
+              const isActive =
+                href === "/" ? pathname === "/" : pathname.startsWith(href)
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex items-center px-4 py-3 text-sm transition-colors",
+                      isActive
+                        ? "font-medium text-emerald-900 bg-teal-50"
+                        : "text-gray-600 hover:bg-stone-50"
+                    )}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
     </header>
   )
 }

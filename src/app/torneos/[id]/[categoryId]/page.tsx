@@ -8,6 +8,8 @@ import { Bracket } from "@/components/bracket"
 import { categories } from "@/data/categories"
 import { matches } from "@/data/matches"
 import { standingsPrebenjaминGroupA, standingsPrebenjaminGroupB } from "@/data/standings"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import type { Match } from "@/types"
 
@@ -16,32 +18,38 @@ function MatchRow({ match }: { match: Match }) {
   const awayWin = match.awayScore > match.homeScore
 
   return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-      <div className="flex items-center gap-2 flex-1 justify-end">
-        <span className={homeWin ? "text-sm font-medium text-emerald-900" : "text-sm text-gray-400"}>
+    <div className="flex items-center py-3 border-b border-gray-100 last:border-0 gap-1">
+      <div className="flex items-center gap-1.5 sm:gap-2 flex-1 justify-end min-w-0">
+        <span className={cn(
+          "text-xs sm:text-sm truncate",
+          homeWin ? "font-medium text-emerald-900" : "text-gray-400"
+        )}>
           {match.homeTeam}
         </span>
         <span className={homeWin
-          ? "bg-emerald-900 text-white px-3 py-1.5 rounded-md font-mono font-bold text-sm"
-          : "bg-gray-100 text-gray-400 px-3 py-1.5 rounded-md font-mono font-bold text-sm"
+          ? "shrink-0 bg-emerald-900 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-mono font-bold text-sm"
+          : "shrink-0 bg-gray-100 text-gray-400 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-mono font-bold text-sm"
         }>
           {match.homeScore}
         </span>
       </div>
-      <span className="text-gray-400 mx-1 font-bold">:</span>
-      <div className="flex items-center gap-2 flex-1">
+      <span className="text-gray-400 mx-1 font-bold text-sm">:</span>
+      <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
         <span className={awayWin
-          ? "bg-emerald-900 text-white px-3 py-1.5 rounded-md font-mono font-bold text-sm"
-          : "bg-gray-100 text-gray-400 px-3 py-1.5 rounded-md font-mono font-bold text-sm"
+          ? "shrink-0 bg-emerald-900 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-mono font-bold text-sm"
+          : "shrink-0 bg-gray-100 text-gray-400 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-mono font-bold text-sm"
         }>
           {match.awayScore}
         </span>
-        <span className={awayWin ? "text-sm font-medium text-emerald-900" : "text-sm text-gray-400"}>
+        <span className={cn(
+          "text-xs sm:text-sm truncate",
+          awayWin ? "font-medium text-emerald-900" : "text-gray-400"
+        )}>
           {match.awayTeam}
         </span>
       </div>
-      <span className="hidden shrink-0 text-xs text-gray-400 sm:block ml-4">
-        {match.date.slice(5).replace("-", "/")} {match.time} · {match.venue}
+      <span className="hidden sm:block shrink-0 text-xs text-gray-400 ml-2 sm:ml-4">
+        {match.date.slice(5).replace("-", "/")} {match.time}
       </span>
     </div>
   )
@@ -53,16 +61,18 @@ function GroupMatchCard({ group, categoryId }: { group: string; categoryId: numb
   )
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100">
-        <h3 className="font-bold text-emerald-900">Partidos Grupo {group}</h3>
-      </div>
-      <div className="px-6">
-        {groupMatches.map((m) => (
-          <MatchRow key={m.id} match={m} />
-        ))}
-      </div>
-    </div>
+    <Card className="bg-white rounded-2xl border border-gray-200 overflow-hidden ring-0 gap-0">
+      <CardContent className="p-0">
+        <div className="px-6 py-4 border-b border-gray-100">
+          <h3 className="font-bold text-emerald-900">Partidos Grupo {group}</h3>
+        </div>
+        <div className="px-3 sm:px-6">
+          {groupMatches.map((m) => (
+            <MatchRow key={m.id} match={m} />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -95,18 +105,18 @@ export default function CategoryPage() {
           </p>
           <h1 className="text-3xl font-black text-emerald-900">{category.name}</h1>
           <div className="mt-2 flex flex-wrap gap-2">
-            <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+            <Badge className="rounded-full bg-gray-100 text-gray-600 border-none hover:bg-gray-100 text-xs font-medium">
               {category.ageGroup}
-            </span>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800">
+            </Badge>
+            <Badge className="rounded-full bg-emerald-100 text-emerald-800 border-none hover:bg-emerald-100 text-xs font-medium">
               {category.format}
-            </span>
-            <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+            </Badge>
+            <Badge className="rounded-full bg-gray-100 text-gray-600 border-none hover:bg-gray-100 text-xs font-medium">
               {category.groups} grupos
-            </span>
-            <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+            </Badge>
+            <Badge className="rounded-full bg-gray-100 text-gray-600 border-none hover:bg-gray-100 text-xs font-medium">
               {category.teams} equipos
-            </span>
+            </Badge>
           </div>
         </div>
 

@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Select,
   SelectTrigger,
@@ -89,11 +91,12 @@ export default function AdminEquipos() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <h1 className="text-2xl font-bold text-gray-900">Equipos</h1>
 
       {/* Formulario */}
-      <div className="rounded-xl border border-gray-200 bg-white px-6 py-6 space-y-5">
+      <Card className="rounded-xl border border-gray-200 bg-white px-4 py-4 sm:px-6 sm:py-6 ring-0 gap-0">
+        <CardContent className="p-0 space-y-5">
         <h2 className="text-base font-semibold text-gray-900">Añadir equipo</h2>
 
         {successName && (
@@ -114,8 +117,8 @@ export default function AdminEquipos() {
             <FieldError message={errors.name?.message} />
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {/* País */}
+          {/* País + Categoría + Grupo */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <Label>País</Label>
               <Controller
@@ -139,7 +142,6 @@ export default function AdminEquipos() {
               <FieldError message={errors.countryCode?.message} />
             </div>
 
-            {/* Categoría */}
             <div>
               <Label>Categoría</Label>
               <Controller
@@ -166,7 +168,6 @@ export default function AdminEquipos() {
               <FieldError message={errors.categoryId?.message} />
             </div>
 
-            {/* Grupo */}
             <div>
               <Label>Grupo</Label>
               <Controller
@@ -197,16 +198,18 @@ export default function AdminEquipos() {
             Añadir equipo
           </Button>
         </form>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* Lista de equipos */}
-      <div className="rounded-xl border border-gray-200 bg-white">
-        <div className="border-b border-gray-100 px-6 py-4">
+      <Card className="rounded-xl border border-gray-200 bg-white ring-0 gap-0">
+        <CardContent className="p-0">
+        <div className="border-b border-gray-100 px-4 sm:px-6 py-4">
           <h2 className="text-base font-semibold text-gray-900">
             Equipos registrados{" "}
-            <span className="ml-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500">
+            <Badge className="ml-1 rounded-full bg-gray-100 text-gray-500 border-none hover:bg-gray-100 text-xs font-medium">
               {teamList.length}
-            </span>
+            </Badge>
           </h2>
         </div>
 
@@ -215,41 +218,44 @@ export default function AdminEquipos() {
             const category = categories.find((c) => c.id === team.categoryId)
 
             return (
-              <li key={team.id} className="flex items-center gap-3 px-6 py-3">
-                <span
+              <li key={team.id} className="flex items-center gap-3 px-4 sm:px-6 py-3">
+                <Badge
                   className={cn(
-                    "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium",
+                    "shrink-0 rounded-full border-none text-xs font-medium",
                     countryBadgeClass(team.countryCode)
                   )}
                 >
                   {team.countryCode}
-                </span>
+                </Badge>
 
-                <span className="flex-1 text-sm font-medium text-gray-900">
+                <span className="flex-1 text-sm font-medium text-gray-900 truncate">
                   {team.name}
                 </span>
 
-                <span className="text-xs text-gray-400">
+                <span className="hidden sm:block text-xs text-gray-400 shrink-0">
                   {category?.name ?? "—"} · Gr. {team.group}
                 </span>
 
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => handleRemove(team.id)}
-                  className="shrink-0 text-xs font-medium text-red-500 hover:text-red-700 transition-colors"
+                  className="shrink-0 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-transparent px-0"
                 >
                   Eliminar
-                </button>
+                </Button>
               </li>
             )
           })}
 
           {teamList.length === 0 && (
-            <li className="px-6 py-10 text-center text-sm text-gray-400">
+            <li className="px-4 sm:px-6 py-10 text-center text-sm text-gray-400">
               No hay equipos registrados.
             </li>
           )}
         </ul>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

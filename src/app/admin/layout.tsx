@@ -25,8 +25,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="flex h-[calc(100vh-3.5rem)]">
 
-      {/* Sidebar */}
-      <aside className="hidden w-64 shrink-0 bg-white border-r border-gray-200 flex-col sm:flex">
+      {/* Sidebar — desktop only */}
+      <aside className="hidden md:flex w-64 shrink-0 bg-white border-r border-gray-200 flex-col">
         <div className="px-4 pt-6 pb-2">
           <p className="text-xs uppercase tracking-widest text-gray-400">
             GESTIÓN PRINCIPAL
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={href}
                 href={href}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg mx-0 transition-colors",
+                  "flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors",
                   isActive
                     ? "bg-emerald-900 text-white font-medium"
                     : "text-gray-600 hover:bg-stone-50"
@@ -71,9 +71,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-auto bg-stone-50 p-8">
-        {children}
-      </main>
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <main className="flex-1 overflow-auto bg-stone-50 p-4 sm:p-6 md:p-8 pb-20 md:pb-8">
+          {children}
+        </main>
+
+        {/* Bottom nav — mobile only */}
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex">
+          {navLinks.map(({ href, label, Icon }) => {
+            const isActive =
+              href === "/admin" ? pathname === "/admin" : pathname.startsWith(href)
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors",
+                  isActive
+                    ? "text-emerald-900"
+                    : "text-gray-400"
+                )}
+              >
+                <Icon className={cn("h-5 w-5", isActive && "text-emerald-900")} />
+                <span className="leading-none">{label}</span>
+              </Link>
+            )
+          })}
+        </nav>
+      </div>
 
     </div>
   )

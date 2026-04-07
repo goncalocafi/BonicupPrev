@@ -27,7 +27,7 @@ export default async function TorneoPage({ params }: Props) {
           <p className="text-xs font-medium tracking-widest uppercase text-gray-400">
             TORNEO INTERNACIONAL DE FÚTBOL BASE
           </p>
-          <h1 className="text-5xl font-black text-emerald-900 leading-none mt-2 md:text-7xl">
+          <h1 className="text-4xl sm:text-5xl font-black text-emerald-900 leading-none mt-2 md:text-7xl">
             {tournament.name.split(" ")[0]}{" "}
             <span className="text-teal-600">{tournament.name.split(" ").slice(1).join(" ")}</span>
           </h1>
@@ -37,14 +37,14 @@ export default async function TorneoPage({ params }: Props) {
         </div>
 
         {/* Big stats */}
-        <div className="flex gap-10 mt-8 mb-10">
+        <div className="flex flex-wrap gap-6 sm:gap-10 mt-6 sm:mt-8 mb-8 sm:mb-10">
           {[
             { value: tournament.totalCategories, label: "CATEGORÍAS" },
             { value: tournament.totalTeams, label: "EQUIPOS" },
             { value: tournament.totalMatches, label: "PARTIDOS" },
           ].map(({ value, label }) => (
             <div key={label}>
-              <p className="text-6xl font-black text-emerald-900">{value}</p>
+              <p className="text-4xl sm:text-6xl font-black text-emerald-900">{value}</p>
               <p className="text-xs tracking-widest uppercase text-gray-400 mt-1">{label}</p>
             </div>
           ))}
