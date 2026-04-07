@@ -20,6 +20,8 @@ export type Category = {
   format: "F7" | "F11"
   groups: number
   teams: number
+  label?: string
+  featured?: boolean
 }
 
 export type Team = {
