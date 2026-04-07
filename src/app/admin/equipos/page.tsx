@@ -73,6 +73,7 @@ export default function AdminEquipos() {
     const newTeam: Team = {
       id: Date.now(),
       name: values.name,
+      initials: values.name.slice(0, 2).toUpperCase(),
       countryCode: values.countryCode,
       categoryId: values.categoryId,
       group: values.group,

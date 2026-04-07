@@ -27,6 +27,7 @@ export type Category = {
 export type Team = {
   id: number
   name: string
+  initials: string
   countryCode: "PT" | "ES" | "FR" | "EN" | string
   categoryId: number
   group: string
